@@ -1,5 +1,7 @@
 let elements = document.querySelectorAll('#board-element');
 let numCount = 0;
+let mode = 'X';
+
 
 const gameBoard = () => {
     let board = [];
@@ -18,7 +20,6 @@ const gameBoard = () => {
 }
 
 const player = () => {
-    let mode = 'X';
     const board = gameBoard();
     const clicked = (index) => {
         if(mode = 'X') {
@@ -37,14 +38,9 @@ console.log(board.get(8));
 board.o(8)
 newPlayer = player(); 
 
-elements.forEach(element => {
-    if(element.innerText == '')
-    {
-        element.addEventListener('click', () => {
-            console.log("Ok Clicked")
-            console.log(numCount)
-            newPlayer.clicked(numCount)
-        })
-    }
-    numCount += 1;
-})
+for(let i = 0; i < elements.length; i++) {
+    console.log(i)
+    elements[i].addEventListener('click', () => {
+        newPlayer.clicked(i)
+    })
+}
