@@ -13,6 +13,7 @@ body {
 }
 
 #top-nav {
+    cursor: default;
     background: #14C38E;
     color: white;
     padding: max(2vw, 10px);
@@ -35,6 +36,7 @@ body {
 }
 
 #status {
+    cursor: default;
     font-size: max(3vw, 20px);
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
     text-align: center; 
