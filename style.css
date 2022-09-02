@@ -83,13 +83,93 @@ body {
     color: white;
 }
 
-/* use for git */
+footer {
+    display: flex;
+    margin-top: 10vw;
+    justify-content: center;
+    align-items: center;
+}
+
+footer > a:link, footer > a:visited {
+    text-decoration: none;
+    color: black;
+}
+
+footer > a > div {
+    background: white;
+    opacity: 95%;
+    padding: 10px;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    box-shadow: var(--box-shadow);
+}
+
+footer> a >div:hover {
+    cursor: pointer;
+    background: rgba(0, 0, 0, 0.113); 
+    animation: rotate2 1s ease-in-out;
+}
+
 @keyframes rotate {
     0% {
         transform: rotateY(0deg);
     }
     100% {
         transform: rotateY(360deg);
+    }
+}
+
+@keyframes rotate2 {
+    from {
+        transform: rotateZ(0deg);
+    }
+    to {
+        transform: rotateZ(359deg);
+    }
+}
+
+@keyframes marquee {
+    0% {
+    transform: translateX(100%);
+    }
+    100% {
+    transform: translateX(-100%);
+    }
+}
+
+@keyframes wiggle {
+    0%, 7% {
+      transform: rotateZ(0);
+    }
+    15% {
+      transform: rotateZ(-15deg);
+    }
+    20% {
+      transform: rotateZ(10deg);
+    }
+    25% {
+      transform: rotateZ(-10deg);
+    }
+    30% {
+      transform: rotateZ(6deg);
+    }
+    35% {
+      transform: rotateZ(-4deg);
+    }
+    40%, 100% {
+      transform: rotateZ(0);
+    }
+  }
+
+@media screen and (max-width: 400px) {
+    #board{
+        width: 80vw;
+        height: 80vw;
+    }
+}
+    
+@media screen and (max-width: 250px) {
+    #top-nav {
+        font-size: 7vw;
     }
 }
     

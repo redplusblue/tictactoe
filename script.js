@@ -31,6 +31,7 @@ const updateDisplay = (() => {
     const elements = document.querySelectorAll('#board-element');
     const status = document.getElementById('status');
     const reset = document.getElementById('reset');
+    const board = document.getElementById('board');
     
     elements.forEach(element => {
         element.addEventListener('click', (e) => {
@@ -56,7 +57,28 @@ const updateDisplay = (() => {
         status.innerText = arg;
     }
 
-    return { updateField, updateStatus };
+    const winColour = (arg) => {
+        for(let i =0; i < arg.length; i++) {
+            elements[arg[i]].style.backgroundColor = '#14C38E';
+            elements[arg[i]].style.color = 'white';
+            elements[arg[i]].style.animation = 'rotate 1s ease-in-out';
+        }
+        document.getElementById('top-nav').style.animationName = 'marquee';
+        document.getElementById('top-nav').style.animationDuration = '1s';
+        reset.style.animationName = 'wiggle';
+        reset.style.animationDuration = '3s';
+        reset.style.animationIterationCount = '3';
+
+    }
+
+    const draw = () => {
+        board.style.opacity = '60%';
+        reset.style.animationName = 'wiggle';
+        reset.style.animationDuration = '3s';
+        reset.style.animationIterationCount = '3';
+    }
+
+    return { updateField, updateStatus, winColour, draw };
 })();
 
 const playGame = (() =>{
@@ -83,6 +105,7 @@ const playGame = (() =>{
         for(let i = 0; i < winConditions.length; i++) {
             if(gameBoard.getField(winConditions[i][0]) !== '' && gameBoard.getField(winConditions[i][0]) === gameBoard.getField(winConditions[i][1]) && gameBoard.getField(winConditions[i][1]) === gameBoard.getField(winConditions[i][2])) {
                 announceWinner(gameBoard.getField(winConditions[i][0]));
+                updateDisplay.winColour([winConditions[i][0], winConditions[i][1], winConditions[i][2]]);
                 gameOver = true;
                 break;
             }  
@@ -102,16 +125,13 @@ const playGame = (() =>{
         match++;
         updateDisplay.updateStatus(`Player ${currentType()}'s turn`);
         if(match === 10) {
-            updateDisplay.updateStatus('Game Over!');
+            updateDisplay.updateStatus('Its a Draw!');
+            updateDisplay.draw();
         }
     }
 
     const reset = () => {
-        gameBoard.reset();
-        updateDisplay.updateField();
-        match = 1;
-        gameOver = false;
-        updateDisplay.updateStatus(`Player ${currentType()}'s turn`);
+        location.reload();
     }
 
     const announceWinner= (type) => {
@@ -120,18 +140,3 @@ const playGame = (() =>{
     return { fillBoard, currentType, reset, checkWinner, checkIfOver };
 })();
 
-
-// let newPlayer = player();
-// newPlayer.playerTurn(newPlayer.type);
-
-
-// for(let i = 0; i < elements.length; i++) {
-//     console.log(i)
-//     elements[i].addEventListener('click', () => {
-//         if(i+2 % 2 === 0) {
-//         newPlayer.clicked(i, 'X');
-//         } else {
-//             newPlayer.clicked(i, 'Y');
-//         }
-//     })
-// }
