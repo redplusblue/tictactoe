@@ -2,7 +2,7 @@ const gameBoard = (() => {
     const board = ["", "", "", "", "", "", "", "", ""];
 
     const setField = (index, arg) => {
-        board[index]= arg;
+        board[index] = arg;
     };
 
     const getField = (index) => {
@@ -10,21 +10,30 @@ const gameBoard = (() => {
     };
 
     const reset = () => {
-        for(let i = 0; i < board.length; i++) {
+        for (let i = 0; i < board.length; i++) {
             board[i] = '';
         }
     };
     return { setField, getField, reset };
 })();
 
-const player = (type) => {
+const player = (type, name) => {
     this.type = type;
-    
+    this.name = name;
+
     const getType = () => {
         return type;
     }
-    
-    return { getType };
+
+    const getName = () => {
+        return name;
+    }
+
+    const setName = (arg) => {
+        name = arg;
+    }
+
+    return { getType, getName, setName };
 }
 
 const updateDisplay = (() => {
@@ -32,11 +41,16 @@ const updateDisplay = (() => {
     const status = document.getElementById('status');
     const reset = document.getElementById('reset');
     const board = document.getElementById('board');
-    
+    const container = document.getElementById('container');
+    const welcomePrompt = document.getElementById('welcome');
+    const nameSubmit = document.getElementById('name-submit');
+    const playerXName = document.getElementsByClassName('player-X-name');
+    const playerOName = document.getElementsByClassName('player-O-name');
+
     elements.forEach(element => {
         element.addEventListener('click', (e) => {
             index = Array.prototype.indexOf.call(elements, element);
-            if(element.innerText !== '' || playGame.checkIfOver()) return;
+            if (element.innerText !== '' || playGame.checkIfOver()) return;
             playGame.fillBoard(index, playGame.currentType());
             updateField();
             playGame.checkWinner();
@@ -47,8 +61,15 @@ const updateDisplay = (() => {
         playGame.reset();
     })
 
+    nameSubmit.addEventListener('click', () => {
+        playGame.playerNames(playerXName[0].value, playerOName[0].value);
+        container.style.filter = 'none';
+        container.style.pointerEvents = 'auto';
+        welcomePrompt.style.display = 'none';
+    })
+
     const updateField = () => {
-        for(let i = 0; i < elements.length; i++) {
+        for (let i = 0; i < elements.length; i++) {
             elements[i].innerText = gameBoard.getField(i);
         }
     }
@@ -58,32 +79,37 @@ const updateDisplay = (() => {
     }
 
     const winColour = (arg) => {
-        for(let i =0; i < arg.length; i++) {
-            elements[arg[i]].style.backgroundColor = '#14C38E';
-            elements[arg[i]].style.color = 'white';
-            elements[arg[i]].style.animation = 'rotate 1s ease-in-out';
+        for (let i = 0; i < arg.length; i++) {
+            elements[arg[i]].classList.add('element-end');
         }
         document.getElementById('top-nav').style.animationName = 'marquee';
         document.getElementById('top-nav').style.animationDuration = '1s';
-        reset.style.animationName = 'wiggle';
-        reset.style.animationDuration = '3s';
-        reset.style.animationIterationCount = '3';
+        reset.classList.add('reset-end');
+    }
 
+    const resetColour = () => {
+        elements.forEach(element => {
+            element.classList.remove('element-end');
+        });
+        document.getElementById('top-nav').style.animationName = 'none';
+        reset.classList.remove('reset-end');
+    }
+
+    const winAnimation = () => {
+        status.classList.toggle('status-end');
     }
 
     const draw = () => {
-        board.style.opacity = '60%';
-        reset.style.animationName = 'wiggle';
-        reset.style.animationDuration = '3s';
-        reset.style.animationIterationCount = '3';
+        updateStatus('Its a Draw!');
+        winAnimation();
     }
 
-    return { updateField, updateStatus, winColour, draw };
+    return { updateField, updateStatus, winColour, draw, winAnimation, resetColour };
 })();
 
-const playGame = (() =>{
-    const playerX = player('X');
-    const playerO = player('O');
+const playGame = (() => {
+    const playerX = player('X', 'Player X');
+    const playerO = player('O', 'Player O');
     let match = 1;
     let gameOver = false;
 
@@ -102,41 +128,71 @@ const playGame = (() =>{
             [0, 4, 8],
             [2, 4, 6]
         ];
-        for(let i = 0; i < winConditions.length; i++) {
-            if(gameBoard.getField(winConditions[i][0]) !== '' && gameBoard.getField(winConditions[i][0]) === gameBoard.getField(winConditions[i][1]) && gameBoard.getField(winConditions[i][1]) === gameBoard.getField(winConditions[i][2])) {
-                announceWinner(gameBoard.getField(winConditions[i][0]));
+        for (let i = 0; i < winConditions.length; i++) {
+            if (gameBoard.getField(winConditions[i][0]) !== '' && gameBoard.getField(winConditions[i][0]) === gameBoard.getField(winConditions[i][1]) && gameBoard.getField(winConditions[i][1]) === gameBoard.getField(winConditions[i][2])) {
+                announceWinner(previousType(currentType()));
                 updateDisplay.winColour([winConditions[i][0], winConditions[i][1], winConditions[i][2]]);
                 gameOver = true;
                 break;
-            }  
+            }
         }
     }
-    
+
     const currentType = () => {
-        if(match % 2 === 0) {
+        if (match % 2 === 0) {
             return playerO.getType();
         } else {
             return playerX.getType();
         }
     }
 
+    previousType = (arg) => {
+        if (arg === 'X') {
+            return playerO.getName();
+        } else {
+            return playerX.getName();
+        }
+    }
+
+    const currentName = () => {
+        if (match % 2 === 0) {
+            return playerO.getName();
+        } else {
+            return playerX.getName();
+        }
+    }
+
     const fillBoard = (index, type) => {
         gameBoard.setField(index, type);
         match++;
-        updateDisplay.updateStatus(`Player ${currentType()}'s turn`);
-        if(match === 10) {
-            updateDisplay.updateStatus('Its a Draw!');
+        updateDisplay.updateStatus(`${currentName()}'s turn`);
+        if (match === 10 && gameOver === false) {
             updateDisplay.draw();
         }
     }
 
     const reset = () => {
-        location.reload();
+        match = 1;
+        gameOver = false;
+        gameBoard.reset();
+        updateDisplay.updateField();
+        updateDisplay.updateStatus(`${currentName()}'s turn`);
+        updateDisplay.winAnimation();
+        updateDisplay.resetColour();
     }
 
-    const announceWinner= (type) => {
-        updateDisplay.updateStatus(`Player ${type} wins!`);
+    const playerNames = (name1, name2) => {
+        if (name1 !== '' && name2 !== '') {
+            playerX.setName(name1);
+            playerO.setName(name2);
+        }
+        updateDisplay.updateStatus(`${currentName()}'s turn`);
     }
-    return { fillBoard, currentType, reset, checkWinner, checkIfOver };
+
+    const announceWinner = (name) => {
+        updateDisplay.updateStatus(`${name} wins!`);
+        updateDisplay.winAnimation();
+    }
+    return { fillBoard, currentType, reset, checkWinner, checkIfOver, playerNames };
 })();
 

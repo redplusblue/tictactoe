@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -15,10 +16,11 @@
     <link rel="icon" type="image/png" sizes="16x16" href="files/favicon-16x16.png">
     <link rel="manifest" href="files/site.webmanifest">
 </head>
+
 <body>
     <nav id="top-nav">Tic-Tac-Toe</nav>
     <section id="container">
-        <div id="status">Player X's turn</div>
+        <div id="status"></div>
         <div id="board">
             <div id="board-element"></div>
             <div id="board-element"></div>
@@ -32,9 +34,22 @@
         </div>
         <div><button id="reset">Reset</button></div>
     </section>
+    <div id="welcome">
+        <span>Welcome!</span>
+        <form id="name-form">
+            <label for="name-input">Player X: </label>
+            <input type="text" id="name-input" class="player-X-name" placeholder="Enter your name">
+            <label for="name-input">Player O: </label>
+            <input type="text" id="name-input" class="player-O-name" placeholder="Enter your name">
+            <button type="button" id="name-submit">Ok</button>
+        </form>
+    </div>
     <footer>
-        <a href="https://github.com/redplusblue" target="_blank" rel="noopener noreferrer"><div>Made by Samir</div></a>
+        <a href="https://github.com/redplusblue" target="_blank" rel="noopener noreferrer">
+            <div>Made by Samir</div>
+        </a>
     </footer>
 </body>
 <script src="script.js"></script>
+
 </html>
