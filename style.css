@@ -285,13 +285,11 @@ footer>a>div:hover {
 }
 
 @keyframes glow {
-    from {
-        text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #14C38E, 0 0 40px #14C38E, 0 0 50px #14C38E, 0 0 60px #14C38E, 0 0 70px #14C38E;
-    }
-
-    to {
-        text-shadow: 0 0 20px #fff, 0 0 30px #14C38E, 0 0 40px #14C38E, 0 0 50px #14C38E, 0 0 60px #14C38E, 0 0 70px #14C38E, 0 0 80px #14C38E;
-    }
+    0% { color: hsl(0turn, 90%, 65%); }
+    25% { color: hsl(.25turn, 90%, 65%); }
+    50% { color: hsl(.5turn, 90%, 65%); }
+    75% { color: hsl(.75turn, 90%, 65%); }
+    100% { color: #14C38E }
 }
 
 @media screen and (max-width: 400px) {

@@ -40,7 +40,6 @@ const updateDisplay = (() => {
     const elements = document.querySelectorAll('#board-element');
     const status = document.getElementById('status');
     const reset = document.getElementById('reset');
-    const board = document.getElementById('board');
     const container = document.getElementById('container');
     const welcomePrompt = document.getElementById('welcome');
     const nameSubmit = document.getElementById('name-submit');
@@ -96,12 +95,17 @@ const updateDisplay = (() => {
     }
 
     const winAnimation = () => {
-        status.classList.toggle('status-end');
+        if(playGame.checkIfOver()) {
+            status.classList.toggle('status-end');
+            }
+        else {
+            status.classList.remove('status-end');
+        }
     }
 
     const draw = () => {
         updateStatus('Its a Draw!');
-        winAnimation();
+        status.classList.add('status-end');
     }
 
     return { updateField, updateStatus, winColour, draw, winAnimation, resetColour };
@@ -130,9 +134,9 @@ const playGame = (() => {
         ];
         for (let i = 0; i < winConditions.length; i++) {
             if (gameBoard.getField(winConditions[i][0]) !== '' && gameBoard.getField(winConditions[i][0]) === gameBoard.getField(winConditions[i][1]) && gameBoard.getField(winConditions[i][1]) === gameBoard.getField(winConditions[i][2])) {
+                gameOver = true;
                 announceWinner(previousType(currentType()));
                 updateDisplay.winColour([winConditions[i][0], winConditions[i][1], winConditions[i][2]]);
-                gameOver = true;
                 break;
             }
         }
@@ -146,7 +150,7 @@ const playGame = (() => {
         }
     }
 
-    previousType = (arg) => {
+    const previousType = (arg) => {
         if (arg === 'X') {
             return playerO.getName();
         } else {
