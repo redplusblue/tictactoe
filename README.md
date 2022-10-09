@@ -10,7 +10,7 @@
   </td>
 </table>
 
-## **Click on the pictures/the link below to try!**
+## **Click on the picture/the link below to try!**
 
 <a href="https://redplusblue.github.io/tictactoe/"><img src="files/preview.png" alt="A preview picture" title="Click Me!"></a>
 
